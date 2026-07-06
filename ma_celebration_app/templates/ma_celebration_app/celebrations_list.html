@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des célébrations de mariage</title>
+</head>
+<body>
+    <h1>Célébrations de mariage</h1>
+    {% if celebrations %}
+        <ul>
+            {% for celebration in celebrations %}
+                <li>
+                    <strong>{{ celebration.groom_name }}</strong> et <strong>{{ celebration.bride_name }}</strong>
+                    le {{ celebration.wedding_date|date:'d/m/Y' }}
+                    {% if celebration.ceremony_time %}à {{ celebration.ceremony_time|time:'H\hi' }}{% endif %}
+                    - <a href="{% url 'celebration_detail' celebration.id %}">Détails</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune célébration planifiée pour le moment.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de la célébration</title>
+</head>
+<body>
+    {% if celebration %}
+        <h1>Détails de la célébration</h1>
+        <p><strong>Marié :</strong> {{ celebration.groom_name }}</p>
+        <p><strong>Mariée :</strong> {{ celebration.bride_name }}</p>
+        <p><strong>Date :</strong> {{ celebration.wedding_date|date:'d/m/Y' }}</p>
+        <p><strong>Heure :</strong> {% if celebration.ceremony_time %}{{ celebration.ceremony_time|time:'H\hi' }}{% else %}Non spécifiée{% endif %}</p>
+        <p><strong>Église :</strong> {{ celebration.church_name }}</p>
+        <p><strong>Prêtre :</strong> {{ celebration.priest_name|default:'Non spécifié' }}</p>
+        <p><strong>Notes :</strong><br>{{ celebration.notes|linebreaks }}</p>
+        <p><a href="{% url 'celebrations_list' %}">Retour à la liste</a></p>
+    {% else %}
+        <p>Célébration introuvable.</p>
+        <p><a href="{% url 'celebrations_list' %}">Retour à la liste</a></p>
+    {% endif %}
+</body>
+</html>

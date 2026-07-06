@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion | Gest Celebration</title>
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+</head>
+<body>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <h1 class="h4 mb-3">Connexion</h1>
+            <form method="post">
+              {% csrf_token %}
+              {% if form.errors %}
+                <div class="alert alert-danger">
+                  <strong>Erreur :</strong> Identifiants invalides.
+                </div>
+              {% endif %}
+              <div class="mb-3">
+                <label for="id_username" class="form-label">Nom d'utilisateur</label>
+                <input type="text" name="username" autofocus required id="id_username" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label for="id_password" class="form-label">Mot de passe</label>
+                <input type="password" name="password" required id="id_password" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+            </form>
+            <div class="mt-4 text-muted small">
+              Utilisateur de démonstration : <strong>admin</strong> / <strong>admin</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

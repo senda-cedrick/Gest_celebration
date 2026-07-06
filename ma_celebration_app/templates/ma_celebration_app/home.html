@@ -1,0 +1,275 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gest Celebration dashboard for wedding management">
+  <title>Dashboard | Gest Celebration</title>
+  <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+</head>
+<body>
+  <div class="admin-shell">
+    <div class="sidebar-backdrop" data-sidebar-close></div>
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <a class="brand-mark" href="{% url 'home' %}" aria-label="Gest Celebration dashboard">
+          <span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span>
+          <span class="brand-copy">
+            <span class="brand-title">Gest Celebration</span>
+            <span class="brand-subtitle">Église Dashboard</span>
+          </span>
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-link active" href="{% url 'home' %}" aria-current="page">
+          <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a class="nav-link" href="{% url 'celebrations_list' %}">
+          <span class="nav-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
+          <span class="nav-text">Célébrations</span>
+        </a>
+        <a class="nav-link" href="#">
+          <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
+          <span class="nav-text">Mariés</span>
+        </a>
+        <a class="nav-link" href="#">
+          <span class="nav-icon"><i class="bi bi-calendar2-event" aria-hidden="true"></i></span>
+          <span class="nav-text">Événements</span>
+        </a>
+        <a class="nav-link" href="#">
+          <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
+          <span class="nav-text">Paramètres</span>
+        </a>
+      </nav>
+      <div class="sidebar-user">
+        <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'assets/images/avatar/avatar.jpg' %}" alt="{{ user.username }}">
+        <strong>{{ user.username }}</strong>
+        <small>Active Workspace</small>
+      </div>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <span class="sidebar-footer-text">System running smoothly</span>
+      </div>
+    </aside>
+    <div class="admin-main">
+      <nav class="navbar admin-navbar navbar-expand bg-white">
+        <div class="container-fluid px-3 px-lg-4">
+          <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="adminSidebar" aria-expanded="true" aria-label="Toggle sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
+            <input class="form-control search-input" type="search" placeholder="Rechercher une célébration" aria-label="Search">
+          </form>
+          <div class="navbar-actions ms-auto">
+            <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme" title="Switch color theme">
+              <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
+            </button>
+            <div class="dropdown">
+              <button class="icon-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                <span class="notification-dot"></span>
+                <i class="bi bi-bell" aria-hidden="true"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end notification-menu">
+                <div class="dropdown-header fw-bold text-body">Notifications</div>
+                <a class="dropdown-item" href="#">
+                  <span class="notification-title">Nouvelle célébration ajoutée</span>
+                  <span class="notification-time">4 minutes ago</span>
+                </a>
+                <a class="dropdown-item" href="#">
+                  <span class="notification-title">Préparation cérémonie</span>
+                  <span class="notification-time">32 minutes ago</span>
+                </a>
+                <a class="dropdown-item" href="#">
+                  <span class="notification-title">Mise à jour du planning</span>
+                  <span class="notification-time">1 hour ago</span>
+                </a>
+              </div>
+            </div>
+            <div class="dropdown">
+              <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img class="avatar-img avatar-sm" src="{% static 'assets/images/avatar/avatar.jpg' %}" alt="{% if user.is_authenticated %}{{ user.username }}{% else %}Invité{% endif %}">
+                <span class="profile-name d-none d-sm-inline">{% if user.is_authenticated %}{{ user.username }}{% else %}Invité{% endif %}</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                {% if user.is_authenticated %}
+                  <li><a class="dropdown-item" href="#">Profil</a></li>
+                  <li><a class="dropdown-item" href="{% url 'logout' %}">Se déconnecter</a></li>
+                {% else %}
+                  <li><a class="dropdown-item" href="{% url 'login' %}">Se connecter</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <main class="dashboard-content">
+        <div class="container-fluid px-3 px-lg-4 py-4">
+          <div class="page-heading">
+            <div class="page-heading-copy">
+              <span class="page-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
+              <div>
+                <p class="eyebrow mb-1">Overview</p>
+                <h1 class="h3 mb-1">Dashboard</h1>
+                <p class="text-muted mb-0">Gestion des célébrations de mariage en église.</p>
+                <p class="text-muted mb-0">{{ celebrations_count }} célébration{% if celebrations_count != 1 %}s{% endif %} enregistrée{% if celebrations_count != 1 %}s{% endif %}{% if next_celebration %}, prochaine le {{ next_celebration.wedding_date|date:'d/m/Y' }}{% endif %}.</p>
+              </div>
+            </div>
+            <div class="heading-actions"><a class="btn btn-outline-secondary btn-sm" href="{% url 'celebrations_list' %}"><i class="bi bi-table" aria-hidden="true"></i> Voir les célébrations</a></div>
+          </div>
+          <section class="row g-3 mt-1" aria-label="Dashboard metrics">
+            <div class="col-12 col-sm-6 col-xl-3">
+              <article class="metric-card metric-primary">
+                <div class="metric-top">
+                  <span class="metric-label">Célébrations</span>
+                  <span class="metric-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
+                </div>
+                <div class="metric-value">{{ celebrations_count }}</div>
+                <div class="metric-meta">
+                  <span class="text-success">Planifiées</span>
+                </div>
+              </article>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+              <article class="metric-card metric-success">
+                <div class="metric-top">
+                  <span class="metric-label">Mariages</span>
+                  <span class="metric-icon"><i class="bi bi-heart-fill" aria-hidden="true"></i></span>
+                </div>
+                <div class="metric-value">{{ marriages_count }}</div>
+                <div class="metric-meta">
+                  <span class="text-success">Totaux</span>
+                </div>
+              </article>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+              <article class="metric-card metric-warning">
+                <div class="metric-top">
+                  <span class="metric-label">Événements en cours</span>
+                  <span class="metric-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+                </div>
+                <div class="metric-value">{{ ongoing_events_count }}</div>
+                <div class="metric-meta">
+                  <span class="text-success">Aujourd'hui</span>
+                </div>
+              </article>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+              <article class="metric-card metric-danger">
+                <div class="metric-top">
+                  <span class="metric-label">Mariées</span>
+                  <span class="metric-icon"><i class="bi bi-person-fill" aria-hidden="true"></i></span>
+                </div>
+                <div class="metric-value">{{ brides_count }}</div>
+                <div class="metric-meta">
+                  <span class="text-success">Enregistrées</span>
+                </div>
+              </article>
+            </div>
+          </section>
+          <section class="row g-3 mt-1">
+            <div class="col-12 col-xl-8">
+              <div class="panel">
+                <div class="panel-header">
+                  <div>
+                    <h2 class="h5 mb-1 section-title"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i><span>Statistiques des événements</span></h2>
+                    <p class="text-muted mb-0">Suivi des célébrations et des mariages prévus.</p>
+                  </div>
+                  <a class="btn btn-light btn-sm" href="#">Voir les détails</a>
+                </div>
+                <div class="chart-bars" aria-label="Sales performance chart">
+                  <div class="chart-column bar-42"><span></span><small>Jan</small></div>
+                  <div class="chart-column bar-58"><span></span><small>Feb</small></div>
+                  <div class="chart-column bar-51"><span></span><small>Mar</small></div>
+                  <div class="chart-column bar-72"><span></span><small>Apr</small></div>
+                  <div class="chart-column bar-66"><span></span><small>May</small></div>
+                  <div class="chart-column bar-83"><span></span><small>Jun</small></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-xl-4">
+              <div class="panel h-100">
+                <div class="panel-header">
+                  <div>
+                    <h2 class="h5 mb-1 section-title"><i class="bi bi-activity" aria-hidden="true"></i><span>Équipe d'accompagnement des événements</span></h2>
+                    <p class="text-muted mb-0">Suivi des actions de l'équipe pour les célébrations en cours.</p>
+                  </div>
+                </div>
+                <div class="activity-list">
+                  <div class="activity-item"><span class="activity-dot bg-primary"></span><div><p class="mb-1 fw-semibold">Nouvelle célébration organisée</p><p class="text-muted small mb-0">L'équipe a finalisé le planning et confirmé les participants.</p></div></div>
+                  <div class="activity-item"><span class="activity-dot bg-success"></span><div><p class="mb-1 fw-semibold">Décoration validée</p><p class="text-muted small mb-0">Le décor de l'église a été approuvé par les futurs mariés.</p></div></div>
+                  <div class="activity-item"><span class="activity-dot bg-warning"></span><div><p class="mb-1 fw-semibold">Coordination en cours</p><p class="text-muted small mb-0">Le support logistique prépare les documents de cérémonie.</p></div></div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="panel mt-3">
+            <div class="panel-header">
+              <div>
+                <h2 class="h5 mb-1 section-title"><i class="bi bi-people" aria-hidden="true"></i><span>Gestion des utilisateurs</span></h2>
+                <p class="text-muted mb-0">Les derniers comptes enregistrés sur l'application.</p>
+              </div>
+              <a class="btn btn-outline-secondary btn-sm" href="{% url 'admin:index' %}">Gérer les utilisateurs</a>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-middle mb-0">
+                <thead><tr><th scope="col">Utilisateur</th><th scope="col">Rôle</th><th scope="col">Équipe</th><th scope="col">Statut</th><th scope="col">Inscrit</th><th scope="col" class="text-end">Action</th></tr></thead>
+                <tbody>
+                  {% for app_user in recent_users %}
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center gap-2">
+                          <img class="avatar-img avatar-sm" src="{% static 'assets/images/avatar/avatar-1.jpg' %}" alt="{{ app_user.username }}">
+                          <div>
+                            <p class="fw-semibold mb-0">{{ app_user.username }}</p>
+                            <p class="text-muted small mb-0">{{ app_user.email }}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{% if app_user.is_superuser %}Super admin{% elif app_user.is_staff %}Staff{% else %}Utilisateur{% endif %}</td>
+                      <td>{% if app_user.is_superuser %}Administration{% elif app_user.is_staff %}Support{% else %}Client{% endif %}</td>
+                      <td>
+                        {% if app_user.is_active %}
+                          <span class="badge text-bg-success">Actif</span>
+                        {% else %}
+                          <span class="badge text-bg-secondary">Inactif</span>
+                        {% endif %}
+                      </td>
+                      <td>{{ app_user.date_joined|date:'d/m/Y' }}</td>
+                      <td class="text-end"><a class="btn btn-light btn-sm" href="#">Voir</a></td>
+                    </tr>
+                  {% empty %}
+                    <tr>
+                      <td colspan="6" class="text-center">Aucun utilisateur enregistré.</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer class="admin-footer">
+        <div class="container-fluid px-3 px-lg-4">
+          <span>Copyright 2026 oyegroup. <br> Developed by <a target="_blank" class="fw-bold text-success" href="#">oyegroup</a> • Distributed by <a target="_blank" class="fw-bold text-success" href="#">oyegroup</a> </span>
+          <span>Professional dashboard template.</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <script>
+    window.adminHMDUser = {
+      name: "{% if user.is_authenticated %}{{ user.username }}{% else %}Invité{% endif %}",
+      workspace: "Active Workspace",
+      avatar: "{% static 'assets/images/avatar/avatar.jpg' %}"
+    };
+  </script>
+  <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+</html>

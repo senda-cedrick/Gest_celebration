@@ -2,23 +2,113 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Gestion des célébrations de mariage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Célébrations de mariage</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body>
-    <h1>Célébrations de mariage</h1>
-    {% if celebrations %}
-        <ul>
-            {% for celebration in celebrations %}
-                <li>
-                    <strong>{{ celebration.groom_name }}</strong> et <strong>{{ celebration.bride_name }}</strong>
-                    le {{ celebration.wedding_date|date:'d/m/Y' }}
-                    {% if celebration.ceremony_time %}à {{ celebration.ceremony_time|time:'H\hi' }}{% endif %}
-                    - <a href="{% url 'celebration_detail' celebration.id %}">Détails</a>
-                </li>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3">Célébrations de mariage</h1>
+                <p class="text-muted mb-0">Liste des célébrations et ajout d’une nouvelle célébration.</p>
+            </div>
+            <a class="btn btn-secondary" href="{% url 'home' %}">Retour au dashboard</a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucune célébration planifiée pour le moment.</p>
-    {% endif %}
+        {% endif %}
+
+        <div class="row gy-4">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Ajouter une célébration</h2>
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                {{ form.groom_name.label_tag }}
+                                {{ form.groom_name }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.bride_name.label_tag }}
+                                {{ form.bride_name }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.wedding_date.label_tag }}
+                                {{ form.wedding_date }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.ceremony_time.label_tag }}
+                                {{ form.ceremony_time }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.church_name.label_tag }}
+                                {{ form.church_name }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.priest_name.label_tag }}
+                                {{ form.priest_name }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.notes.label_tag }}
+                                {{ form.notes }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ajouter la célébration</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 mb-3">Célébrations proposées</h2>
+                        {% if celebrations %}
+                            <ul class="list-group list-group-flush">
+                                {% for celebration in celebrations %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ celebration.groom_name }}</strong> & <strong>{{ celebration.bride_name }}</strong><br>
+                                            <small class="text-muted">{{ celebration.wedding_date|date:'d/m/Y' }}{% if celebration.ceremony_time %} à {{ celebration.ceremony_time|time:'H\hi' }}{% endif %}</small>
+                                        </div>
+                                        <div class="btn-group" role="group" aria-label="Actions célébration">
+                                            <a class="btn btn-sm btn-outline-primary" href="{% url 'celebration_detail' celebration.id %}">Détails</a>
+                                            <form method="post" action="{% url 'celebration_delete' celebration.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                                            </form>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted mb-0">Aucune célébration planifiée pour le moment.</p>
+                        {% endif %}
+                        <div class="mt-4">
+                            <h3 class="h6 mb-3">Exemples de célébrations</h3>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <strong>Lucas Martin</strong> & <strong>Emma Bernard</strong><br>
+                                    <small class="text-muted">10/08/2026 à 15h00 – Église Sainte-Marie</small>
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Marc Petit</strong> & <strong>Julie Moreau</strong><br>
+                                    <small class="text-muted">22/09/2026 à 11h30 – Chapelle Notre-Dame</small>
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Thomas Leroy</strong> & <strong>Claire Dubois</strong><br>
+                                    <small class="text-muted">05/10/2026 à 14h00 – Église Saint-Joseph</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

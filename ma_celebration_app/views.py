@@ -1,7 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from .forms import WeddingCelebrationForm
 from .models import WeddingCelebration
 
 
@@ -28,9 +30,31 @@ def home(request):
 
 @login_required
 def celebrations_list(request):
+    if request.method == 'POST':
+        form = WeddingCelebrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Célébration ajoutée avec succès.')
+            return redirect('celebrations_list')
+    else:
+        form = WeddingCelebrationForm()
+
     celebrations = WeddingCelebration.objects.order_by('wedding_date')
     return render(request, 'ma_celebration_app/celebrations_list.html', {
         'celebrations': celebrations,
+        'form': form,
+    })
+
+
+@login_required
+def celebration_delete(request, celebration_id):
+    celebration = get_object_or_404(WeddingCelebration, id=celebration_id)
+    if request.method == 'POST':
+        celebration.delete()
+        messages.success(request, 'Célébration supprimée avec succès.')
+        return redirect('celebrations_list')
+    return render(request, 'ma_celebration_app/celebration_confirm_delete.html', {
+        'celebration': celebration,
     })
 
 

@@ -23,10 +23,11 @@ def generate_report_pdf(celebrations):
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
     styles = getSampleStyleSheet()
     story = []
-    # include logo (prefer JPEG/PNG); try SVG via svglib as fallback
-    logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.jpg')
+    # include logo (prefer transparent PNG); try PNG/JPG first, SVG as fallback
+    logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.png')
     if not os.path.exists(logo_path):
-        # keep backward compatibility with the SVG transparent logo
+        logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.jpg')
+    if not os.path.exists(logo_path):
         logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo-transparent.svg')
 
     if os.path.exists(logo_path):
@@ -124,7 +125,9 @@ def generate_monthly_report_pdf(celebrations):
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
     styles = getSampleStyleSheet()
     story = []
-    logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.jpg')
+    logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.png')
+    if not os.path.exists(logo_path):
+        logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.jpg')
     if not os.path.exists(logo_path):
         logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo-transparent.svg')
     if os.path.exists(logo_path):
@@ -174,7 +177,9 @@ def generate_events_report_pdf(celebrations):
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
     styles = getSampleStyleSheet()
     story = []
-    logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.jpg')
+    logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.png')
+    if not os.path.exists(logo_path):
+        logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.jpg')
     if not os.path.exists(logo_path):
         logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo-transparent.svg')
     if os.path.exists(logo_path):
@@ -224,7 +229,9 @@ def generate_certificate_report_pdf(celebrations):
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
     styles = getSampleStyleSheet()
     story = []
-    logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.jpg')
+    logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.png')
+    if not os.path.exists(logo_path):
+        logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo.jpg')
     if not os.path.exists(logo_path):
         logo_path = os.path.join(settings.BASE_DIR, 'ma_celebration_app', 'static', 'assets', 'images', 'brand', 'logo', 'logo-transparent.svg')
     if os.path.exists(logo_path):

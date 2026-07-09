@@ -50,7 +50,7 @@
         </a>
       </nav>
       <div class="sidebar-user">
-        <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'assets/images/brand/logo/logo-icon.svg' %}" alt="{{ user.username }}">
+        <img class="avatar-img avatar-md sidebar-user-avatar" src="{% static 'assets/images/brand/logo/logo-transparent.svg' %}" alt="{{ user.username }}">
         <strong>{{ user.username }}</strong>
         <small>Active Workspace</small>
       </div>
@@ -97,7 +97,7 @@
             </div>
             <div class="dropdown">
               <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img class="avatar-img avatar-sm" src="{% static 'assets/images/brand/logo/logo-icon.svg' %}" alt="{% if user.is_authenticated %}{{ user.username }}{% else %}Invité{% endif %}">
+                <img class="avatar-img avatar-sm" src="{% static 'assets/images/brand/logo/logo-transparent.svg' %}" alt="{% if user.is_authenticated %}{{ user.username }}{% else %}Invité{% endif %}">
                 <span class="profile-name d-none d-sm-inline">{% if user.is_authenticated %}{{ user.username }}{% else %}Invité{% endif %}</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
@@ -310,7 +310,7 @@
     window.adminHMDUser = {
       name: "{% if user.is_authenticated %}{{ user.username }}{% else %}Invité{% endif %}",
       workspace: "Active Workspace",
-      avatar: "{% static 'assets/images/brand/logo/logo-icon.svg' %}"
+      avatar: "{% static 'assets/images/brand/logo/logo-transparent.svg' %}"
     };
   </script>
   <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>

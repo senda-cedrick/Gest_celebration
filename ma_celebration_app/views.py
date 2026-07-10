@@ -253,15 +253,15 @@ def generate_certificate_report_pdf(celebrations):
     if celebrations:
         certificate = celebrations.order_by('-wedding_date').first()
         certificate_text = (
-            f"Nous certifions que Monsieur {certificate.groom_name}, résidant sur "
-            f"{certificate.church_name}, et Madame {certificate.bride_name}, résidant sur "
-            f"{certificate.church_name}, ont été unis par le mariage selon le rite évangélique "
-            f"à l'Église intercommunautaire Prince de Paix (EIPP) dans la paroisse."
+            f"Nous certifions que Monsieur {certificate.groom_name}, résidant sur la paroisse, "
+            f"et Madame {certificate.bride_name}, résidant sur la paroisse, ont été unis par le mariage "
+            f"selon le rite évangélique à l'Église intercommunautaire Prince de Paix (EIPP) dans la paroisse."
         )
         celebration_line = (
             f"Cette cérémonie a été célébrée le {certificate.wedding_date.strftime('%d/%m/%Y')} "
             f"à {certificate.church_name} par {certificate.priest_name or 'le pasteur titulaire de la paroisse'}."
         )
+        report_date = certificate.wedding_date.strftime('%d/%m/%Y')
     else:
         certificate_text = (
             "Nous certifions que les futurs mariés ont été unis par le mariage selon le rite évangélique "
@@ -270,6 +270,7 @@ def generate_certificate_report_pdf(celebrations):
         celebration_line = (
             "Ce certificat de mariage est préparé pour attester l'union solennelle devant Dieu et la communauté."
         )
+        report_date = timezone.localdate().strftime('%d/%m/%Y')
 
     story.append(Paragraph(certificate_text, styles['BodyText']))
     story.append(Spacer(1, 8))
@@ -280,10 +281,6 @@ def generate_certificate_report_pdf(celebrations):
         styles['BodyText']
     ))
     story.append(Spacer(1, 16))
-    if celebrations:
-        report_date = certificate.wedding_date.strftime('%d/%m/%Y')
-    else:
-        report_date = timezone.localdate().strftime('%d/%m/%Y')
     story.append(Paragraph(
         f"Fait à l'Église intercommunautaire Prince de Paix (EIPP), le {report_date}.",
         styles['BodyText']

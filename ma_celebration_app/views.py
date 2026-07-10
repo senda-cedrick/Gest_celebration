@@ -247,27 +247,51 @@ def generate_certificate_report_pdf(celebrations):
         except Exception:
             pass
 
-    story.append(Paragraph("Certificat de mariage - L’église prince de paix", styles['Title']))
+    story.append(Paragraph("Certificat de mariage - Église intercommunautaire Prince de Paix (EIPP)", styles['Title']))
     story.append(Spacer(1, 12))
 
     if celebrations:
         certificate = celebrations.order_by('-wedding_date').first()
         certificate_text = (
-            f"Ce certificat atteste que {certificate.groom_name} et {certificate.bride_name} "
-            f"se sont unis par les liens du mariage le {certificate.wedding_date.strftime('%d/%m/%Y')} "
-            f"à {certificate.church_name}. Cette cérémonie a été célébrée par {certificate.priest_name or 'le prêtre de la paroisse'}."
+            f"Nous certifions que Monsieur {certificate.groom_name}, résidant sur "
+            f"{certificate.church_name}, et Madame {certificate.bride_name}, résidant sur "
+            f"{certificate.church_name}, ont été unis par le mariage selon le rite évangélique "
+            f"à l'Église intercommunautaire Prince de Paix (EIPP) dans la paroisse."
+        )
+        celebration_line = (
+            f"Cette cérémonie a été célébrée le {certificate.wedding_date.strftime('%d/%m/%Y')} "
+            f"à {certificate.church_name} par {certificate.priest_name or 'le pasteur titulaire de la paroisse'}."
         )
     else:
         certificate_text = (
-            "Ce certificat de mariage est préparé pour l'Église Prince de Paix. "
-            "Il atteste que les futurs mariés sont unis devant Dieu et la communauté."
+            "Nous certifions que les futurs mariés ont été unis par le mariage selon le rite évangélique "
+            "à l'Église intercommunautaire Prince de Paix (EIPP) dans la paroisse."
         )
+        celebration_line = (
+            "Ce certificat de mariage est préparé pour attester l'union solennelle devant Dieu et la communauté."
+        )
+
     story.append(Paragraph(certificate_text, styles['BodyText']))
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 8))
+    story.append(Paragraph(celebration_line, styles['BodyText']))
+    story.append(Spacer(1, 12))
     story.append(Paragraph(
-        "Nous déclarons solennellement que ce mariage est célébré avec respect, foi et engagement mutuel.",
+        "Ainsi ils ne sont plus deux, mais une seule chair ; que donc l'homme ne sépare pas.",
         styles['BodyText']
     ))
+    story.append(Spacer(1, 16))
+    if celebrations:
+        report_date = certificate.wedding_date.strftime('%d/%m/%Y')
+    else:
+        report_date = timezone.localdate().strftime('%d/%m/%Y')
+    story.append(Paragraph(
+        f"Fait à l'Église intercommunautaire Prince de Paix (EIPP), le {report_date}.",
+        styles['BodyText']
+    ))
+    story.append(Spacer(1, 24))
+    story.append(Paragraph("Pasteur titulaire de la paroisse", styles['BodyText']))
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("Signature : ____________________________", styles['BodyText']))
 
     doc.build(story)
     buffer.seek(0)

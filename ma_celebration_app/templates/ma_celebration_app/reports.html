@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapports - L’église prince de paix</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="h3">Rapports</h1>
+        <p class="text-muted mb-0">Téléchargez le PDF des mariages par mois, événements et certificat de mariage.</p>
+      </div>
+      <a class="btn btn-secondary" href="{% url 'home' %}">Retour au dashboard</a>
+    </div>
+
+    <div class="row gy-4 mb-4">
+      <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h2 class="h5">Mariages par mois</h2>
+            <p>Génère un PDF avec le nombre de mariages par mois.</p>
+            <a class="btn btn-primary" href="{% url 'reports_monthly_pdf' %}">Télécharger</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h2 class="h5">Liste des événements</h2>
+            <p>Génère un PDF avec tous les événements planifiés.</p>
+            <a class="btn btn-primary" href="{% url 'reports_events_pdf' %}">Télécharger</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h2 class="h5">Certificat de mariage</h2>
+            <p>Génère un PDF du certificat de mariage pour le dernier événement.</p>
+            <a class="btn btn-primary" href="{% url 'reports_certificate_pdf' %}">Télécharger</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="h5">Résumé des événements</h2>
+        {% if celebrations %}
+          <ul class="list-group list-group-flush">
+            {% for celebration in celebrations %}
+              <li class="list-group-item">
+                <strong>{{ celebration.groom_name }}</strong> & <strong>{{ celebration.bride_name }}</strong> — {{ celebration.wedding_date|date:'d/m/Y' }} à {{ celebration.church_name }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mb-0">Aucun événement enregistré pour le moment.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
